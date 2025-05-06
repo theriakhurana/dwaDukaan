@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
-/*
-  for doing crud operations on medicines
-*/
+//for doing crud operations on medicines
 
 public class MedicineManager {
   private ArrayList<Medicine> medicines;
@@ -13,8 +11,7 @@ public class MedicineManager {
 
   //create
   public boolean addNewMedicine(Medicine med){
-    // check if the medicine already exists
-    // return false
+    if(getMedicineById(med.getId()) != null) return false; // medicine with this id already exists
 
     medicines.add(med);
     return true; 
