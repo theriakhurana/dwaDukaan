@@ -8,7 +8,7 @@ public class Medicine{
   private double price;
 
 
-  public Medicine(String id, String name, int stock, String expiryDate, String manufacturingDate, String manufacturer, double price) {
+  public Medicine(int id, String name, int stock, String expiryDate, String manufacturingDate, String manufacturer, double price) {
     this.id = id;
     this.name = name;
     this.stock = stock;
