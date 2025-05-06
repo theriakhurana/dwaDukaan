@@ -1,5 +1,5 @@
 public class Medicine{
-  private String id;
+  private int id;
   private String name;
   private int stock;
   private String expiryDate; // YYYY-MM-DD
@@ -19,7 +19,7 @@ public class Medicine{
   }
 
 // getters
-  public String getId(){
+  public int getId(){
     return id;
   }
 
@@ -58,6 +58,6 @@ public class Medicine{
 
   @Override
   public String toString(){
-    return String.format("ID: %s | Name: %s | Stock: %d | Expiry: %s | Price: %.2f", id, name, stock, expiryDate, price);
+    return String.format("ID: %d | Name: %s | Stock: %d | Expiry: %s | Price: %.2f", id, name, stock, expiryDate, price);
   }
 };
