@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 // to prevent any invalid input from user 
 
 public class InputValidator{

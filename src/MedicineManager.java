@@ -58,5 +58,4 @@ public class MedicineManager {
     medicines.remove(med);
     return true; // medicine deleted
   }
-
 };

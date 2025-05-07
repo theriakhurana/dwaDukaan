@@ -3,19 +3,15 @@ public class Medicine{
   private String name;
   private int stock;
   private String expiryDate; // YYYY-MM-DD
-  private String manufacturingDate; // YYYY-MM-DD
-  private String manufacturer;
   private double price;
 
 
-  public Medicine(int id, String name, int stock, String expiryDate, String manufacturingDate, String manufacturer, double price) {
+  public Medicine(int id, String name, int stock, String expiryDate, double price) {
     this.id = id;
     this.name = name;
     this.stock = stock;
     this.expiryDate = expiryDate;
     this.price = price;
-    //this.manufacturingDate = manufacturingDate;
-    //this.manufacturer = manufacturer;
   }
 
 // getters

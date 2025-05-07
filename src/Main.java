@@ -54,17 +54,60 @@ public class Main{
 
   private static void addNewMedicine(){
     System.out.println("Add new Medicine");
+    int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
+    if(medicineManager.getMedicineById(id) != null){
+      System.out.println("ID already exists");
+      return;
+    }
+    
+    String name = InputValidator.getStringInput(sc, "Enter medicine name: ");
+    int stock = InputValidator.getIntInput(sc, "Enter medicine stock: ");
+    String expiryDate = InputValidator.getStringInput(sc, "Enter medicine expiry date (YYYY-MM-DD): ");
+    double price = InputValidator.getDoubleInput(sc, "Enter medicine price: ");
+
+    Medicine med = new Medicine(id, name, stock, expiryDate, price);
+
+    medicineManager.addNewMedicine(med);
+    System.out.println("Medicine added successfully!");
   }
 
   private static void updateMedicine(){
     System.out.println("Update Medicine");
+    int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
+    Medicine med = medicineManager.getMedicineById(id);
+    if(med == null){
+      System.out.println("Medicine not found..");
+      return;
+    }
+
+    String name = InputValidator.getStringInput(sc, "Enter medicine name: ");
+    int stock = InputValidator.getIntInput(sc, "Enter medicine stock: ");
+    String expiryDate = InputValidator.getStringInput(sc, "Enter medicine expiry date (YYYY-MM-DD): ");
+    double price = InputValidator.getDoubleInput(sc, "Enter medicine price: ");
+
+    medicineManager.updateMedicine(id, name, stock, expiryDate, price);
+    System.out.println("Medicine updated successfully!");
   }
 
   private static void deleteMedicine(){
     System.out.println("Delete Medicine");
+    int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
+    if(medicineManager.deleteMedicine(id)){
+      System.out.println("Medicine deleted successfully!");
+    } else {
+      System.out.println("Medicine not found..");
+    }
   }
 
   private static void getMedicineById(){
     System.out.println("Get Medicine by ID");
+    int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
+
+    Medicine med = medicineManager.getMedicineById(id);
+    if(med != null){
+      System.out.println(med.toString());
+    } else {
+      System.out.println("Medicine not found..");
+    }
   }
 }
