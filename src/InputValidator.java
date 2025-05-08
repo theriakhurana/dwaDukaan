@@ -34,7 +34,14 @@ public class InputValidator{
   }
 
   public static String getStringInput(Scanner sc, String msg){
-    System.out.println(msg);
-    return sc.nextLine().trim(); // remove spaces from both sides
+    String input;
+    while (true) {
+      System.out.println(msg);
+      input = sc.nextLine().trim();
+      if (!input.isEmpty()) {
+        return input;
+      }
+      System.out.println("Input cannot be empty. Please try again.");
+    }
   }
 };

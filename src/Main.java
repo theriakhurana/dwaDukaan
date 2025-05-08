@@ -7,18 +7,25 @@ public class Main {
     System.out.println("--- Welcome To Dwa Dukaan ---");
     System.out.println("-----------------------------");
 
-    int prompt = InputValidator.getIntInput(sc, "Enter 0 for Admin || Enter 1 for User");
-    switch(prompt) {
-      case 0:
-        AdminFunctionality.function();
-        break;
-      case 1:
-        System.out.println("User Functionality");
-        //UserFunctionality.function();
-        break;
-      default:
-        System.out.println("Please enter valid login ID");
+    boolean exit = false;
+    while(!exit){
+      int prompt = InputValidator.getIntInput(sc, "Enter 0 for Admin || Enter 1 for User || Enter -1 to exit");
+
+      switch(prompt) {
+        case 0:
+          AdminFunctionality.function();
+          break;
+        case 1:
+          System.out.println("User Functionality");
+          UserFunctionality.function();
+          break;
+        case -1:
+          exit = true;
+          System.out.println("Thanks for using Dwa Dukaan!");
+          break;
+        default:
+          System.out.println("Please enter valid login ID");
+        }
     }
   }
-
 };

@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 public class AdminFunctionality {
     private static Scanner sc = new Scanner(System.in);
-    private static MedicineManager medicineManager = new MedicineManager();
+    private static MedicineManager medicineManager = MedicineManager.getInstance();
+
 
     public static void function(){
 
@@ -16,7 +17,7 @@ public class AdminFunctionality {
                     addNewMedicine();
                     break;
                 case 2 :
-                    medicineManager.displayAllMedicines();
+                    medicineManager.displayAdminView();
                     break;
                 case 3:
                     updateMedicine();
@@ -29,7 +30,6 @@ public class AdminFunctionality {
                     break;
                 case 0:
                     exit = true;
-                    System.out.println("Exiting the program. Thank you for using Dwa Dukaan!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
