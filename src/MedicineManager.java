@@ -1,61 +1,56 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
-//for doing crud operations on medicines
+//for doing crud operations on medicines using id
 
 public class MedicineManager {
-  private ArrayList<Medicine> medicines;
+  private HashMap<Integer, Medicine> medicines;
 
   public MedicineManager() {
-    medicines = new ArrayList<>();
+    medicines = new HashMap<>();
   }
-
-  //create
-  public boolean addNewMedicine(Medicine med){
-    if(getMedicineById(med.getId()) != null) return false; // medicine with this id already exists
-
-    medicines.add(med);
-    return true; 
+//----------------------------------------------------------------------------------
+// add new medicine
+  public void addNewMedicine(Medicine med){
+    medicines.put(med.getId(), med);
   }
-
-  //read all medicines
+//----------------------------------------------------------------------------------
+//read all medicines
   public void displayAllMedicines(){
     if(medicines.isEmpty()){
-      System.out.println("No medicines found");
+      System.out.println("Inventory is empty");
       return;
     }
 
-    for(Medicine med : medicines){
-      System.out.println(med.toString());
+    for(Medicine med : medicines.values()){
+      System.out.println(med);
     }
+    System.out.println();
   }
-  
-  // read medicine by id
+//----------------------------------------------------------------------------------
+// read medicine by id
   public Medicine getMedicineById(int id){
-    for(Medicine med : medicines){
-      if(med.getId() == id) return med;
-    }
+    if(medicines.containsKey(id)) return medicines.get(id);
     return null;
   }
 
-  // update
-  public boolean updateMedicine(int id, String name, int stock, String expiryDate, double price){
-    Medicine med = getMedicineById(id);
-    if(med == null) return false; // medicine ni mili
-
+//----------------------------------------------------------------------------------
+// update medicine by id
+  public void updateMedicine(int id, String name, int stock, String expiryDate, double price){
+    Medicine med = medicines.get(id);
     med.setName(name);
     med.setStock(stock);
     med.setExpiryDate(expiryDate);
     med.setPrice(price);
-
-    return true; // medicine updated
   }
-
-  // delete
+//----------------------------------------------------------------------------------
+// delete medicine by id
   public boolean deleteMedicine(int id){
-    Medicine med = getMedicineById(id);
-    if(med == null) return false; // medicine ni mili
-
-    medicines.remove(med);
-    return true; // medicine deleted
+    if(medicines.containsKey(id)){
+      medicines.remove(id);
+      return true;
+    }
+    return false;
   }
+//----------------------------------------------------------------------------------
 };

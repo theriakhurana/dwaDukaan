@@ -37,7 +37,7 @@ public class Main{
       }
     }
   }
-
+// ------------------------------------------------------------------------------
   private static void printMenu(){
     System.out.println("--- Welcome To Dwa Dukaan ---");
     System.out.println("-----------------------------");
@@ -50,7 +50,7 @@ public class Main{
     System.out.println("-----------------------------");
     System.out.println();
   }
-
+// ------------------------------------------------------------------------------
   private static void addNewMedicine(){
     System.out.println("Add new Medicine");
     int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
@@ -69,11 +69,12 @@ public class Main{
     medicineManager.addNewMedicine(med);
     System.out.println("Medicine added successfully!");
   }
-
+//-----------------------------------------------------------------------------
   private static void updateMedicine(){
     System.out.println("Update Medicine");
     int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
     Medicine med = medicineManager.getMedicineById(id);
+
     if(med == null){
       System.out.println("Medicine not found..");
       return;
@@ -88,6 +89,7 @@ public class Main{
     System.out.println("Medicine updated successfully!");
   }
 
+// ------------------------------------------------------------------------------
   private static void deleteMedicine(){
     System.out.println("Delete Medicine");
     int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
@@ -98,6 +100,7 @@ public class Main{
     }
   }
 
+// ------------------------------------------------------------------------------
   private static void getMedicineById(){
     System.out.println("Get Medicine by ID");
     int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
@@ -110,3 +113,5 @@ public class Main{
     }
   }
 }
+
+// ------------------------------------------------------------------------------
