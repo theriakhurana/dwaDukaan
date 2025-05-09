@@ -36,6 +36,9 @@ public class OrderManager {
             String status_str = (order.getStatus() == 1) ? "Processed" : "Failed";
             System.out.println(order + " | Status: " + status_str);
         }
+        for(Order order : pendingOrders){
+            System.out.println(order + " | Status: Pending");
+        }
     }
 
 

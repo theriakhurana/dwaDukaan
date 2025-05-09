@@ -44,7 +44,7 @@ public class MedicineManager {
     }
 
     for(Medicine med : medicines.values()){
-      System.out.printf("%d | %s | %.2f", med.getId(), med.getName(), med.getPrice());
+      System.out.printf("ID: %d | Name: %s | Price: %.2f\n", med.getId(), med.getName(), med.getPrice());
     }
     System.out.println();
   }

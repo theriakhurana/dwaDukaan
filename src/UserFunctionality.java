@@ -45,7 +45,24 @@ public class UserFunctionality {
 
 
     private static void placeOrder(){
+        int medicineId = InputValidator.getIntInput(sc, "Enter Medicine ID: ");
+        Medicine med = medicineManager.getMedicineById(medicineId);
+        if(med == null){
+            System.out.println("Medicine not found");
+            return;
+        }
 
+        int qty = InputValidator.getIntInput(sc, "Enter quantity: ");
+        if(qty <= 0){
+            System.out.println("Quantity should be valid");
+            return;
+        }
+
+        //unique id
+        String orderId = "OID" + System.currentTimeMillis();
+        Order order = new Order(orderId, medicineId, qty);
+
+        orderManager.placeOrder(order);
     }
 // ------------------------------------------------------------------------------------------
 }

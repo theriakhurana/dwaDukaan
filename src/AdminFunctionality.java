@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class AdminFunctionality {
     private static Scanner sc = new Scanner(System.in);
     private static MedicineManager medicineManager = MedicineManager.getInstance();
-
+    private static OrderManager orderManager = OrderManager.getInstance();
 
     public static void function(){
 
@@ -28,6 +28,15 @@ public class AdminFunctionality {
                 case 5:
                     getMedicineById();
                     break;
+                case 6:
+                    orderManager.viewPendingOrders();
+                    break;
+                case 7:
+                    orderManager.processNextOrder();
+                    break;
+                case 8:
+                    orderManager.viewProcessedOrders();
+                    break;
                 case 0:
                     exit = true;
                     break;
@@ -46,6 +55,9 @@ public class AdminFunctionality {
         System.out.println("3. Update Medicine");
         System.out.println("4. Delete Medicine");
         System.out.println("5. Search Medicine by ID");
+        System.out.println("6. View Pending Orders");
+        System.out.println("7. Process Next Order");
+        System.out.println("8. View Processed Orders");
         System.out.println("0. Exit");
         System.out.println("-----------------------------");
         System.out.println();
