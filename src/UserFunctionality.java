@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class UserFunctionality {
     private static Scanner sc = new Scanner(System.in);
     private static MedicineManager medicineManager = MedicineManager.getInstance();
+    private static OrderManager orderManager = OrderManager.getInstance();
 
     public static void function(){
         boolean exit = false;
@@ -17,7 +18,7 @@ public class UserFunctionality {
                     placeOrder();
                     break;
                 case 3:
-                    viewStatus();
+                    orderManager.getOrderStatus();
                     break;
                 case 0:
                     exit = true;
@@ -42,15 +43,9 @@ public class UserFunctionality {
 
 // ------------------------------------------------------------------------------------------
 
+
     private static void placeOrder(){
 
     }
-
-// ------------------------------------------------------------------------------------------
-
-    private static void viewStatus(){
-
-    }
-
 // ------------------------------------------------------------------------------------------
 }
