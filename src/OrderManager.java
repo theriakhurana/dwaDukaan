@@ -27,7 +27,7 @@ public class OrderManager {
 // -------------------------------------------------------------------------------------
 // User -> to check status
     public void getOrderStatus(){
-        if(pendingOrders.isEmpty()){
+        if(pendingOrders.isEmpty() && processedOrders.isEmpty()){
             System.out.println("Order toh place krlo uncle!!");
             return;
         }
