@@ -1,18 +1,19 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class UserFunctionality {
     private static Scanner sc = new Scanner(System.in);
-    private static MedicineManager medicineManager = MedicineManager.getInstance();
+    private static MedicineCRUD medicineCRUD = new MedicineCRUD();
     private static OrderManager orderManager = OrderManager.getInstance();
 
-    public static void function(){
+    public static void function() {
         boolean exit = false;
-        while(!exit){
+        while (!exit) {
             printMenu();
             int input = InputValidator.getIntInput(sc, "Enter your choice: ");
-            switch(input) {
+            switch (input) {
                 case 1:
-                    medicineManager.displayUserView();
+                    viewAvailableMedicines();
                     break;
                 case 2:
                     placeOrder();
@@ -30,8 +31,8 @@ public class UserFunctionality {
         }
     }
 
-// ----------------------------------------------------------------------------------------
-    private static void printMenu(){
+// -------------------------------------------------------------------------------------------
+    private static void printMenu() {
         System.out.println("-----------------------------");
         System.out.println("1. View Available Medicines");
         System.out.println("2. Order Medicines");
@@ -40,29 +41,40 @@ public class UserFunctionality {
         System.out.println("-----------------------------");
         System.out.println();
     }
+// -------------------------------------------------------------------------------------------
+// view all medicines
 
-// ------------------------------------------------------------------------------------------
+    private static void viewAvailableMedicines() {
+        List<Medicine> medicines = medicineCRUD.getAllMedicines();
+        if (medicines.isEmpty()) {
+            System.out.println("No medicines found.");
+        } else {
+            System.out.println("ID\tName\tStock\tExpiry\t\tPrice");
+            for (Medicine med : medicines) {
+                System.out.printf("%d\t%s\t%d\t%s\t%.2f\n", med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
+            }
+        }
+    }
 
-
-    private static void placeOrder(){
+// -------------------------------------------------------------------------------------------
+// add new order
+    private static void placeOrder() {
         int medicineId = InputValidator.getIntInput(sc, "Enter Medicine ID: ");
-        Medicine med = medicineManager.getMedicineById(medicineId);
-        if(med == null){
+        Medicine med = medicineCRUD.getMedicineById(medicineId);
+        if (med == null) {
             System.out.println("Medicine not found");
             return;
         }
-
         int qty = InputValidator.getIntInput(sc, "Enter quantity: ");
-        if(qty <= 0){
+        if (qty <= 0) {
             System.out.println("Quantity should be valid");
             return;
         }
 
-        //unique id
+        // unique order ID
         String orderId = "OID" + System.currentTimeMillis();
         Order order = new Order(orderId, medicineId, qty);
-
         orderManager.placeOrder(order);
     }
-// ------------------------------------------------------------------------------------------
 }
+// -------------------------------------------------------------------------------------------

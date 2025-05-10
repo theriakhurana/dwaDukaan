@@ -13,9 +13,11 @@ public class Main {
 
       switch(prompt) {
         case 0:
+          // owner functions
           AdminFunctionality.function();
           break;
         case 1:
+          // client functions
           System.out.println("User Functionality");
           UserFunctionality.function();
           break;

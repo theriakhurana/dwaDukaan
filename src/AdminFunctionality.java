@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminFunctionality {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     private static MedicineCRUD medicineCRUD = new MedicineCRUD();
     private static OrderManager orderManager = OrderManager.getInstance();
 
@@ -67,7 +67,7 @@ public class AdminFunctionality {
 // ------------------------------------------------------------------------------
 // Add medicine
     private static void addNewMedicine() {
-        try {
+        try{
             System.out.print("Enter Medicine Name: ");
             String name = sc.nextLine();
             int stock = InputValidator.getIntInput(sc, "Enter Stock: ");
@@ -77,21 +77,21 @@ public class AdminFunctionality {
 
             Medicine med = new Medicine(0, name, stock, expiry, price);
             medicineCRUD.addMedicine(med);
-        } catch (Exception e) {
-            System.out.println("Error adding medicine: " + e.getMessage());
+        }catch(Exception e){
+            System.out.println("Error!");
         }
     }
 
 // List All Medicines ------------------------------------------------------------------
     private static void listAllMedicines() {
         List<Medicine> medicines = medicineCRUD.getAllMedicines();
-        if (medicines.isEmpty()) {
+        if(medicines.isEmpty()){
             System.out.println("No medicines found.");
-        } else {
+        }else{
             System.out.println("ID\tName\tStock\tExpiry\t\tPrice");
-            for (Medicine med : medicines) {
+            for(Medicine med : medicines){
                 System.out.printf("%d\t%s\t%d\t%s\t%.2f\n",
-                        med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
+                med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
             }
         }
     }
@@ -99,7 +99,7 @@ public class AdminFunctionality {
 // ------------------------------------------------------------------------------------
 // Update Medicine --------------------------------------------------------------------
     private static void updateMedicine() {
-        try {
+        try{
             int id = InputValidator.getIntInput(sc, "Enter Medicine ID to update: ");
             System.out.print("Enter New Name: ");
             String name = sc.nextLine();
@@ -110,7 +110,7 @@ public class AdminFunctionality {
 
             Medicine med = new Medicine(id, name, stock, expiry, price);
             medicineCRUD.updateMedicine(med);
-        } catch (Exception e) {
+        }catch(Exception e){
             System.out.println("Error updating medicine: " + e.getMessage());
         }
     }
@@ -119,10 +119,10 @@ public class AdminFunctionality {
 // Delete Medicine -------------------------------------------------------------------
 
     private static void deleteMedicine() {
-        try {
+        try{
             int id = InputValidator.getIntInput(sc, "Enter Medicine ID to delete: ");
             medicineCRUD.deleteMedicine(id);
-        } catch (Exception e) {
+        }catch(Exception e){
             System.out.println("Error deleting medicine: " + e.getMessage());
         }
     }
@@ -130,21 +130,21 @@ public class AdminFunctionality {
 // ------------------------------------------------------------------------------------
 // Search Medicine by ID --------------------------------------------------------------
     private static void getMedicineById() {
-        try {
+        try{
             int id = InputValidator.getIntInput(sc, "Enter Medicine ID to search: ");
             Medicine med = medicineCRUD.getMedicineById(id);
-            if (med != null) {
+            if(med != null){
                 System.out.println("ID: " + med.getId());
                 System.out.println("Name: " + med.getName());
                 System.out.println("Stock: " + med.getStock());
                 System.out.println("Expiry: " + med.getExpiryDate());
                 System.out.println("Price: " + med.getPrice());
-            } else {
+            }else{
                 System.out.println("Medicine not found.");
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             System.out.println("Error retrieving medicine: " + e.getMessage());
         }
     }
-
 };
+// -------------------------------------------------------------------------------------------

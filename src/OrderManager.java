@@ -1,108 +1,129 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.List;
+import java.util.LinkedList;
 
 public class OrderManager {
-    private static OrderManager instance = null; // for global access
-    private static Queue<Order> pendingOrders = new LinkedList<>();
-    private static ArrayList<Order> processedOrders = new ArrayList<>();
-    private static MedicineManager medicineManager = MedicineManager.getInstance();
+
+    //global access
+    private static OrderManager instance = null;
+    private static OrderCRUD orderCRUD = new OrderCRUD();
+    private static MedicineCRUD medicineCRUD = MedicineCRUD.getInstance();
+
+    // for pending orders (FIFO order mei)
+    private final Queue<Order> pendingOrderQueue = new LinkedList<>();
 
     public static OrderManager getInstance() {
-        if (instance == null) {
+        if(instance == null){
             instance = new OrderManager();
         }
         return instance;
     }
-// -------------------------------------------------------------------------------------
-// for user -> order place krne k liye..
 
-    public void placeOrder(Order neworder){
-        neworder.setStatus(0); // pending -> 0
-        pendingOrders.offer(neworder);
+// -------------------------------------------------------------------------------------------
+// Place order (User)
+    public void placeOrder(Order newOrder) {
+        newOrder.setStatus(0); // pending
+        orderCRUD.addOrder(newOrder);
         System.out.println("Order placed successfully");
-        System.out.println(neworder);
+        System.out.println(newOrder);
     }
 
-// -------------------------------------------------------------------------------------
-// User -> to check status
-    public void getOrderStatus(){
-        if(pendingOrders.isEmpty() && processedOrders.isEmpty()){
-            System.out.println("Order toh place krlo uncle!!");
-            return;
-        }
-
-        for(Order order : processedOrders){
-            String status_str = (order.getStatus() == 1) ? "Processed" : "Failed";
-            System.out.println(order + " | Status: " + status_str);
-        }
-        for(Order order : pendingOrders){
-            System.out.println(order + " | Status: Pending");
-        }
+// -------------------------------------------------------------------------------------------
+// sare pending orders db se queue mei load krne k liye
+    public void loadPendingOrdersIntoQueue() {
+        List<Order> pendingOrders = orderCRUD.getOrdersByStatus(0); // 0-> pending state
+        pendingOrderQueue.clear();
+        pendingOrderQueue.addAll(pendingOrders);
     }
 
-
-// -------------------------------------------------------------------------------------
-// Admin -> to see all the pending orders
-
-    public void viewPendingOrders(){
-        if (pendingOrders.isEmpty()) {
+// -------------------------------------------------------------------------------------------
+// db se just fetch orders with status 0.
+    public void viewPendingOrders() {
+        List<Order> pendingOrders = orderCRUD.getOrdersByStatus(0);
+        if(pendingOrders.isEmpty()){
             System.out.println("No pending orders.");
             return;
         }
         System.out.println("Pending Orders:");
-        for (Order order : pendingOrders) {
+        for(Order order : pendingOrders){
             System.out.println(order + " | Status: Pending");
         }
     }
-
-// -------------------------------------------------------------------------------------
-// Admin -> Process Order from the queue
-
-    public void processNextOrder(){
-        if (pendingOrders.isEmpty()) {
+// -------------------------------------------------------------------------------------------
+// Admin --> Process next order from the queue
+    public void processNextOrder() {
+        // If queue is empty, load from db
+        if(pendingOrderQueue.isEmpty()){
+            loadPendingOrdersIntoQueue();
+        }
+        if(pendingOrderQueue.isEmpty()){
             System.out.println("No pending orders to process.");
             return;
         }
 
-        Order order = pendingOrders.poll();
-        Medicine med = medicineManager.getMedicineById(order.getMedicineId());
+        Order order = pendingOrderQueue.poll();
+        Medicine med = medicineCRUD.getMedicineById(order.getMedicineId());
         if(med == null){
             System.out.println("Medicine ID " + order.getMedicineId() + " not found.");
-            order.setStatus(-1); // Failed --> -1
-            processedOrders.add(order);
+            orderCRUD.updateOrderStatus(order.getOrderId(), -1); // Failed
             return;
         }
 
         if(med.getStock() >= order.getQuantity()){
-            int updatedStock = med.getStock() - order.getQuantity();
-            med.setStock(updatedStock);
-            order.setStatus(1); // processed // stock updated
-            processedOrders.add(order);
+            med.setStock(med.getStock() - order.getQuantity());
+            medicineCRUD.updateMedicine(med);
+            orderCRUD.updateOrderStatus(order.getOrderId(), 1); // Processed
             System.out.println("Order processed successfully:");
             System.out.println(order);
-        }
-        else{
+        }else{
             System.out.println("Insufficient stock for medicine ID: " + order.getMedicineId());
-            order.setStatus(-1); // failed
-            processedOrders.add(order);
+            orderCRUD.updateOrderStatus(order.getOrderId(), -1); // Failed
         }
     }
-// -----------------------------------------------------------------------
-// Admin -> View processed orders
-
-    public void viewProcessedOrders(){
+// -------------------------------------------------------------------------------------------
+// Admin: View processed and failed orders
+    public void viewProcessedOrders() {
+        List<Order> processedOrders = orderCRUD.getOrdersByStatus(1);
         if(processedOrders.isEmpty()){
             System.out.println("No processed orders.");
-            return;
         }
-
-        System.out.println("Processed Orders: ");
-        System.out.println("------------------------------");
-        for(Order order : processedOrders){
-            String status_str = order.getStatus() == 1 ? "Processed" : "Failed";
-            System.out.println(order + " | Status: " + status_str);
+        else{
+            System.out.println("Processed Orders:");
+            for(Order order : processedOrders){
+                System.out.println(order + " | Status: Processed");
+            }
+        }
+        List<Order> failedOrders = orderCRUD.getOrdersByStatus(-1);
+        if(!failedOrders.isEmpty()){
+            System.out.println("Failed Orders:");
+            for(Order order : failedOrders){
+                System.out.println(order + " | Status: Failed");
+            }
         }
     }
 
+// -------------------------------------------------------------------------------------------
+// User --> Check status of all orders
+    public void getOrderStatus() {
+        List<Order> allOrders = orderCRUD.getAllOrders();
+        if(allOrders.isEmpty()){
+            System.out.println("No orders found.");
+            return;
+        }
+        for(Order order : allOrders){
+            String statusStr;
+            switch(order.getStatus()){
+                case 1:
+                    statusStr = "Processed";
+                    break;
+                case -1:
+                    statusStr = "Failed";
+                    break;
+                default:
+                    statusStr = "Pending";
+            }
+            System.out.println(order + " | Status: " + statusStr);
+        }
+    }
 }
+// -------------------------------------------------------------------------------------------
