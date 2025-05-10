@@ -1,8 +1,9 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminFunctionality {
     private static Scanner sc = new Scanner(System.in);
-    private static MedicineManager medicineManager = MedicineManager.getInstance();
+    private static MedicineCRUD medicineCRUD = new MedicineCRUD();
     private static OrderManager orderManager = OrderManager.getInstance();
 
     public static void function(){
@@ -17,7 +18,7 @@ public class AdminFunctionality {
                     addNewMedicine();
                     break;
                 case 2 :
-                    medicineManager.displayAdminView();
+                    listAllMedicines();
                     break;
                 case 3:
                     updateMedicine();
@@ -64,67 +65,86 @@ public class AdminFunctionality {
     }
 
 // ------------------------------------------------------------------------------
-    private static void addNewMedicine(){
-        System.out.println("Add new Medicine");
-        int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
-        if(medicineManager.getMedicineById(id) != null){
-            System.out.println("ID already exists");
-            return;
+// Add medicine
+    private static void addNewMedicine() {
+        try {
+            System.out.print("Enter Medicine Name: ");
+            String name = sc.nextLine();
+            int stock = InputValidator.getIntInput(sc, "Enter Stock: ");
+            System.out.print("Enter Expiry Date (yyyy-mm-dd): ");
+            String expiry = sc.nextLine();
+            double price = InputValidator.getDoubleInput(sc, "Enter Price: ");
+
+            Medicine med = new Medicine(0, name, stock, expiry, price);
+            medicineCRUD.addMedicine(med);
+        } catch (Exception e) {
+            System.out.println("Error adding medicine: " + e.getMessage());
         }
-
-        String name = InputValidator.getStringInput(sc, "Enter medicine name: ");
-        int stock = InputValidator.getIntInput(sc, "Enter medicine stock: ");
-        String expiryDate = InputValidator.getStringInput(sc, "Enter medicine expiry date (YYYY-MM-DD): ");
-        double price = InputValidator.getDoubleInput(sc, "Enter medicine price: ");
-
-        Medicine med = new Medicine(id, name, stock, expiryDate, price);
-
-        medicineManager.addNewMedicine(med);
-        System.out.println("Medicine added successfully!");
     }
 
-//-----------------------------------------------------------------------------
-    private static void updateMedicine(){
-        System.out.println("Update Medicine");
-        int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
-        Medicine med = medicineManager.getMedicineById(id);
-
-        if(med == null){
-            System.out.println("Medicine not found..");
-            return;
-        }
-
-        String name = InputValidator.getStringInput(sc, "Enter medicine name: ");
-        int stock = InputValidator.getIntInput(sc, "Enter medicine stock: ");
-        String expiryDate = InputValidator.getStringInput(sc, "Enter medicine expiry date (YYYY-MM-DD): ");
-        double price = InputValidator.getDoubleInput(sc, "Enter medicine price: ");
-
-        medicineManager.updateMedicine(id, name, stock, expiryDate, price);
-        System.out.println("Medicine updated successfully!");
-    }
-
-// ------------------------------------------------------------------------------
-    private static void deleteMedicine(){
-        System.out.println("Delete Medicine");
-        int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
-        if(medicineManager.deleteMedicine(id)){
-            System.out.println("Medicine deleted successfully!");
+// List All Medicines ------------------------------------------------------------------
+    private static void listAllMedicines() {
+        List<Medicine> medicines = medicineCRUD.getAllMedicines();
+        if (medicines.isEmpty()) {
+            System.out.println("No medicines found.");
         } else {
-            System.out.println("Medicine not found..");
+            System.out.println("ID\tName\tStock\tExpiry\t\tPrice");
+            for (Medicine med : medicines) {
+                System.out.printf("%d\t%s\t%d\t%s\t%.2f\n",
+                        med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
+            }
         }
     }
 
-// ------------------------------------------------------------------------------
-    private static void getMedicineById(){
-        System.out.println("Get Medicine by ID");
-        int id = InputValidator.getIntInput(sc, "Enter medicine ID: ");
+// ------------------------------------------------------------------------------------
+// Update Medicine --------------------------------------------------------------------
+    private static void updateMedicine() {
+        try {
+            int id = InputValidator.getIntInput(sc, "Enter Medicine ID to update: ");
+            System.out.print("Enter New Name: ");
+            String name = sc.nextLine();
+            int stock = InputValidator.getIntInput(sc, "Enter New Stock: ");
+            System.out.print("Enter New Expiry Date (yyyy-mm-dd): ");
+            String expiry = sc.nextLine();
+            double price = InputValidator.getDoubleInput(sc, "Enter New Price: ");
 
-        Medicine med = medicineManager.getMedicineById(id);
-        if(med != null){
-            System.out.println(med.toString());
-        } else {
-            System.out.println("Medicine not found..");
+            Medicine med = new Medicine(id, name, stock, expiry, price);
+            medicineCRUD.updateMedicine(med);
+        } catch (Exception e) {
+            System.out.println("Error updating medicine: " + e.getMessage());
         }
     }
-// ------------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------------
+// Delete Medicine -------------------------------------------------------------------
+
+    private static void deleteMedicine() {
+        try {
+            int id = InputValidator.getIntInput(sc, "Enter Medicine ID to delete: ");
+            medicineCRUD.deleteMedicine(id);
+        } catch (Exception e) {
+            System.out.println("Error deleting medicine: " + e.getMessage());
+        }
+    }
+
+// ------------------------------------------------------------------------------------
+// Search Medicine by ID --------------------------------------------------------------
+    private static void getMedicineById() {
+        try {
+            int id = InputValidator.getIntInput(sc, "Enter Medicine ID to search: ");
+            Medicine med = medicineCRUD.getMedicineById(id);
+            if (med != null) {
+                System.out.println("ID: " + med.getId());
+                System.out.println("Name: " + med.getName());
+                System.out.println("Stock: " + med.getStock());
+                System.out.println("Expiry: " + med.getExpiryDate());
+                System.out.println("Price: " + med.getPrice());
+            } else {
+                System.out.println("Medicine not found.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error retrieving medicine: " + e.getMessage());
+        }
+    }
+
 };
