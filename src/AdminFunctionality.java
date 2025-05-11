@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -88,10 +90,22 @@ public class AdminFunctionality {
         if(medicines.isEmpty()){
             System.out.println("No medicines found.");
         }else{
-            System.out.println("ID\tName\tStock\tExpiry\t\tPrice");
-            for(Medicine med : medicines){
-                System.out.printf("%d\t%s\t%d\t%s\t%.2f\n",
-                med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
+            System.out.println("ID\tName\t\tStock\tExpiry\t\tPrice\t\tStatus");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = new Date();
+
+            for (Medicine med : medicines) {
+                try {
+                    Date expiry = sdf.parse(med.getExpiryDate());
+                    String status = expiry.before(today) ? "EXPIRED" : "VALID";
+
+                    System.out.printf("%d\t%-15s%d\t%s\t%.2f\t\t%s\n",
+                            med.getId(), med.getName(), med.getStock(),
+                            med.getExpiryDate(), med.getPrice(), status);
+                } catch (Exception e) {
+                    System.out.println("Error parsing date for medicine ID: " + med.getId());
+                }
             }
         }
     }

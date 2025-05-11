@@ -1,9 +1,11 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class MedicineCRUD {
     private static MedicineCRUD instance = null; // global access
+    private static final int minStockFlag = 10;
 
     public static MedicineCRUD getInstance() {
         if(instance == null) return new MedicineCRUD();
