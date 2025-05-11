@@ -1,7 +1,6 @@
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.sql.Date;
+import java.util.*;
 
 public class MedicineCRUD {
     private static MedicineCRUD instance = null; // global access
@@ -12,6 +11,30 @@ public class MedicineCRUD {
         return instance;
     }
 
+// -------------------------------------------------------------------------------
+    private static final PriorityQueue<Medicine> lowStockQueue = new PriorityQueue<>(
+            Comparator.comparingInt(Medicine::getStock)
+                      .thenComparing(Medicine::getExpiryDate)
+    );
+
+    private void checkForLowStock() {
+        List<Medicine> allMeds = getAllMedicines();
+
+        // to avoid duplicate medicines
+
+        Set<Integer> seenMeds = new HashSet<>();
+        for (Medicine med : allMeds) {
+            if (med.getStock() <= minStockFlag && !seenMeds.contains(med.getId())) {
+                lowStockQueue.offer(med);
+                seenMeds.add(med.getId());
+            }
+        }
+    }
+
+    public List<Medicine> getLowStockMedicines() {
+        checkForLowStock();
+        return new ArrayList<>(lowStockQueue);
+    }
 // -------------------------------------------------------------------------------
 // add new medicine to database --------------------------------------------------
     public void addMedicine(Medicine med) throws SQLException {
