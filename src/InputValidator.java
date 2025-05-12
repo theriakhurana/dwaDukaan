@@ -14,7 +14,11 @@ public class InputValidator{
       System.out.println(msg);
       try{
         input = Integer.parseInt(sc.nextLine());
-        break; // exit loop
+        if(input > 0) {
+          break; // valid positive number
+        } else {
+          System.out.println("Please enter a positive number.");
+        }
       }
       catch(NumberFormatException e){
         System.out.println("Invalid input. Please enter a number.");
@@ -30,6 +34,11 @@ public class InputValidator{
       System.out.println(msg);
       try{
         input = Double.parseDouble(sc.nextLine());
+        if(input > 0) {
+          break; // valid positive number
+        } else {
+          System.out.println("Please enter a positive number.");
+        }
         break; // exit loop
       }
       catch(NumberFormatException e){
@@ -48,7 +57,7 @@ public class InputValidator{
       if (!input.isEmpty()) {
         return input;
       }
-      System.out.println("Input cannot be empty. Please try again.");
+      System.out.println("Input cannot be empty. Please try again."); // empty inputs not allowed
     }
   }
 

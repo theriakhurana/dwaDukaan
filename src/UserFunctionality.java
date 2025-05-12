@@ -70,6 +70,10 @@ public class UserFunctionality {
             System.out.println("Quantity should be valid");
             return;
         }
+        if(qty > med.getStock()){
+            System.out.println("Insufficient Stock. Available: " + med.getStock());
+            return;
+        }
 
         // unique order ID
         String orderId = "OID" + System.currentTimeMillis();
