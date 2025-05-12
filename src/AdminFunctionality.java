@@ -82,8 +82,7 @@ public class AdminFunctionality {
             System.out.print("Enter Medicine Name: ");
             String name = sc.nextLine();
             int stock = InputValidator.getIntInput(sc, "Enter Stock: ");
-            System.out.print("Enter Expiry Date (yyyy-mm-dd): ");
-            String expiry = sc.nextLine();
+            String expiry = InputValidator.getValidExpiryDate(sc, "Enter Expiry Date (yyyy-MM-dd): ");
             double price = InputValidator.getDoubleInput(sc, "Enter Price: ");
 
             Medicine med = new Medicine(0, name, stock, expiry, price);
@@ -127,8 +126,7 @@ public class AdminFunctionality {
             System.out.print("Enter New Name: ");
             String name = sc.nextLine();
             int stock = InputValidator.getIntInput(sc, "Enter New Stock: ");
-            System.out.print("Enter New Expiry Date (yyyy-mm-dd): ");
-            String expiry = sc.nextLine();
+            String expiry = InputValidator.getValidExpiryDate(sc, "Enter Expiry Date (yyyy-MM-dd): ");
             double price = InputValidator.getDoubleInput(sc, "Enter New Price: ");
 
             Medicine med = new Medicine(id, name, stock, expiry, price);
@@ -171,7 +169,7 @@ public class AdminFunctionality {
     }
 
 // -------------------------------------------------------------------------------------------
-
+// medicines with stock < 10.
     private static void checkLowStockMedicines() {
         List<Medicine> lowStockMeds = medicineCRUD.getLowStockMedicines();
 

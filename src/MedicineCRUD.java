@@ -73,7 +73,7 @@ public class MedicineCRUD {
             ps.executeUpdate();
             System.out.println("Medicine added :)");
         }catch(SQLException e){
-            System.out.println("Failed to add medicine.");
+            System.out.println("Database Error: " + e.getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ public class MedicineCRUD {
             ps.executeUpdate();
             System.out.println("Medicine updated :)");
         }catch(SQLException e) {
-            System.out.println("Failed to update medicine.");
+            System.out.println("Database Error: " + e.getMessage());
         }
     }
 // ----------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public class MedicineCRUD {
             ps.executeUpdate();
             System.out.println("Medicine deleted!");
         }catch(SQLException e){
-            System.out.println("Failed to delete medicine.");
+            System.out.println("Database Error: " + e.getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ public class MedicineCRUD {
                 medicines.add(med);
             }
         }catch(SQLException e){
-            System.out.println("Failed to fetch medicines.");
+            System.out.println("Database Error: " + e.getMessage());
         }
         return medicines;
     }
@@ -152,7 +152,7 @@ public class MedicineCRUD {
                 }
             }
         }catch(SQLException e){
-            System.out.println("Failed to get medicine by ID");
+            System.out.println("Database Error: " + e.getMessage());
         }
         return null;
     }
