@@ -49,9 +49,9 @@ public class UserFunctionality {
         if (medicines.isEmpty()) {
             System.out.println("No medicines found.");
         } else {
-            System.out.println("ID\tName\tStock\tExpiry\t\tPrice");
+            System.out.println("ID\tName\t\tPrice");
             for (Medicine med : medicines) {
-                System.out.printf("%d\t%s\t%d\t%s\t%.2f\n", med.getId(), med.getName(), med.getStock(), med.getExpiryDate(), med.getPrice());
+                System.out.printf("%d\t%s\t%.2f\n", med.getId(), med.getName(), med.getPrice());
             }
         }
     }

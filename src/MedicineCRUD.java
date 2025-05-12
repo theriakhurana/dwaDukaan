@@ -12,6 +12,7 @@ public class MedicineCRUD {
     }
 
 // -------------------------------------------------------------------------------
+// priority queue -> medicines with stock less than 10
     private static final PriorityQueue<Medicine> lowStockQueue = new PriorityQueue<>(
             Comparator.comparingInt(Medicine::getStock)
                       .thenComparing(Medicine::getExpiryDate)
@@ -21,7 +22,6 @@ public class MedicineCRUD {
         List<Medicine> allMeds = getAllMedicines();
 
         // to avoid duplicate medicines
-
         Set<Integer> seenMeds = new HashSet<>();
         for (Medicine med : allMeds) {
             if (med.getStock() <= minStockFlag && !seenMeds.contains(med.getId())) {
@@ -35,6 +35,30 @@ public class MedicineCRUD {
         checkForLowStock();
         return new ArrayList<>(lowStockQueue);
     }
+
+// ------------------------------------------------------------------------------
+// Hashmap --> overall stock using medicine name.
+    public void viewStockSummary(){
+        List<Medicine> allMeds = getAllMedicines();
+        if(allMeds.isEmpty()){
+            System.out.println("Inventory is empty");
+            return;
+        }
+
+        Map<String, Integer> map = new HashMap<>();
+        for(Medicine med : allMeds){
+            String name = med.getName();
+            int stock = med.getStock();
+            map.put(name, map.getOrDefault(name, 0) + stock);
+        }
+
+        System.out.println("\n=== Total Stock Available===");
+        System.out.println("Name\t\tTotal Stock");
+        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.printf("%s\t\t%d\n", entry.getKey(), entry.getValue());
+        }
+    }
+
 // -------------------------------------------------------------------------------
 // add new medicine to database --------------------------------------------------
     public void addMedicine(Medicine med) throws SQLException {
