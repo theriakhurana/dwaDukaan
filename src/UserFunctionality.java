@@ -75,32 +75,62 @@ public class UserFunctionality {
         }
     }
 
-
-    // -------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 // add new order
     private static void placeOrder() {
         int medicineId = InputValidator.getIntInput(sc, "Enter Medicine ID: ");
         Medicine med = medicineCRUD.getMedicineById(medicineId);
-        if (med == null) {
-            System.out.println("Medicine not found");
-            return;
-        }
-        int qty = InputValidator.getIntInput(sc, "Enter quantity: ");
-        if (qty <= 0) {
-            System.out.println("Quantity should be valid");
-            return;
-        }
-        if(qty > med.getStock()){
-            System.out.println("Insufficient Stock. Available: " + med.getStock());
+
+        if(med == null){
+            System.out.println("Medicine not found.");
             return;
         }
 
-        // unique order ID
+        // Check if the medicine is expired
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        try{
+            Date expiry = sdf.parse(med.getExpiryDate());
+            if(expiry.before(today)){
+                System.out.println("This medicine is expired and cannot be ordered.");
+                return;
+            }
+        }catch(Exception e){
+            System.out.println("Error occured!");
+            return;
+        }
+
+        int qty = InputValidator.getIntInput(sc, "Enter quantity: ");
+        if (qty <= 0) {
+            System.out.println("️Quantity should be greater than zero.");
+            return;
+        }
+
+        if (qty > med.getStock()) {
+            System.out.println("️Insufficient stock. Only " + med.getStock() + " units available.");
+            return;
+        }
+
+        // Unique order ID generation
         String orderId = "OID" + System.currentTimeMillis();
         Order order = new Order(orderId, medicineId, qty);
         orderManager.placeOrder(order);
+
+        // Reduce stock after successful order
+        med.setStock(med.getStock() - qty);
+        medicineCRUD.updateMedicine(med);
+
+        // confirmation text
+        System.out.println("Order placed successfully!");
+        System.out.println("Order Summary:");
+        System.out.println("Order ID     : " + orderId);
+        System.out.println("Medicine Name: " + med.getName());
+        System.out.println("Quantity     : " + qty);
+        System.out.printf ("Unit Price   : Rs.%.2f\n", med.getPrice());
+        System.out.printf ("Total Price  : Rs.%.2f\n", med.getPrice() * qty);
     }
 
+//-----------------------------------------------------------------------------------------------------
 // user k liye -> add feedback
     private static void addFeedback() {
         String feedback = InputValidator.getStringInput(sc,"Enter your feedback: ");
