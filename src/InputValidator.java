@@ -14,7 +14,7 @@ public class InputValidator{
       System.out.println(msg);
       try{
         input = Integer.parseInt(sc.nextLine());
-        if(input > 0) {
+        if(input >= -1) {
           break; // valid positive number
         } else {
           System.out.println("Please enter a positive number.");

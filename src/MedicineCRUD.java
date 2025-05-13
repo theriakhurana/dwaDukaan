@@ -18,11 +18,12 @@ public class MedicineCRUD {
                       .thenComparing(Medicine::getExpiryDate)
     );
 
+    // avoids duplicate medicine ids on multiple calls
+    private static final Set<Integer> seenMeds = new HashSet<>();
+
     private void checkForLowStock() {
         List<Medicine> allMeds = getAllMedicines();
 
-        // to avoid duplicate medicines
-        Set<Integer> seenMeds = new HashSet<>();
         for (Medicine med : allMeds) {
             if (med.getStock() <= minStockFlag && !seenMeds.contains(med.getId())) {
                 lowStockQueue.offer(med);

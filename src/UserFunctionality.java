@@ -1,3 +1,6 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,17 +49,28 @@ public class UserFunctionality {
 
     private static void viewAvailableMedicines() {
         List<Medicine> medicines = medicineCRUD.getAllMedicines();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
         if (medicines.isEmpty()) {
             System.out.println("No medicines found.");
         } else {
             System.out.println("ID\tName\t\tPrice");
             for (Medicine med : medicines) {
-                System.out.printf("%d\t%s\t%.2f\n", med.getId(), med.getName(), med.getPrice());
+                try {
+                    Date expiry = sdf.parse(med.getExpiryDate());
+                    // Show only medicines that are NOT expired
+                    if (expiry.after(today)) {
+                        System.out.printf("%d\t%s\t%.2f\n", med.getId(), med.getName(), med.getPrice());
+                    }
+                } catch (ParseException e) {
+                    System.out.println("Error fetching medicines");
+                }
             }
         }
     }
 
-// -------------------------------------------------------------------------------------------
+
+    // -------------------------------------------------------------------------------------------
 // add new order
     private static void placeOrder() {
         int medicineId = InputValidator.getIntInput(sc, "Enter Medicine ID: ");
@@ -80,5 +94,5 @@ public class UserFunctionality {
         Order order = new Order(orderId, medicineId, qty);
         orderManager.placeOrder(order);
     }
-}
+};
 // -------------------------------------------------------------------------------------------
