@@ -1,5 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ public class UserFunctionality {
     private static Scanner sc = new Scanner(System.in);
     private static MedicineCRUD medicineCRUD = new MedicineCRUD();
     private static OrderManager orderManager = OrderManager.getInstance();
+    private static ArrayList<String> feedbackList = new ArrayList<>();
 
     public static void function() {
         boolean exit = false;
@@ -23,6 +25,9 @@ public class UserFunctionality {
                     break;
                 case 3:
                     orderManager.getOrderStatus();
+                    break;
+                case 4:
+                    addFeedback();
                     break;
                 case 0:
                     exit = true;
@@ -40,6 +45,7 @@ public class UserFunctionality {
         System.out.println("1. View Available Medicines");
         System.out.println("2. Order Medicines");
         System.out.println("3. View Order Status");
+        System.out.println("4. Add Feedback");
         System.out.println("0. Exit");
         System.out.println("-----------------------------");
         System.out.println();
@@ -93,6 +99,25 @@ public class UserFunctionality {
         String orderId = "OID" + System.currentTimeMillis();
         Order order = new Order(orderId, medicineId, qty);
         orderManager.placeOrder(order);
+    }
+
+// user k liye -> add feedback
+    private static void addFeedback() {
+        String feedback = InputValidator.getStringInput(sc,"Enter your feedback: ");
+        feedbackList.add(feedback);
+        System.out.println("Thank you for your feedback!");
+    }
+
+// admin k liye -> view all feedbacks
+    public static void viewFeedbacks() {
+        if (feedbackList.isEmpty()) {
+            System.out.println("No feedback yet.");
+        } else {
+            System.out.println("Feedback from users:");
+            for (String feedback : feedbackList) {
+                System.out.println("- " + feedback);
+            }
+        }
     }
 };
 // -------------------------------------------------------------------------------------------

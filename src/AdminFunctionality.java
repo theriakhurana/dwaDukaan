@@ -47,6 +47,9 @@ public class AdminFunctionality {
                 case 10:
                     medicineCRUD.viewStockSummary();
                     break;
+                case 11:
+                    UserFunctionality.viewFeedbacks();
+                    break;
                 case 0:
                     exit = true;
                     break;
@@ -70,6 +73,7 @@ public class AdminFunctionality {
         System.out.println("8. View Processed Orders");
         System.out.println("9. Check low stock Meds");
         System.out.println("10. View Stock Summary");
+        System.out.println("11. View Feedbacks");
         System.out.println("0. Exit");
         System.out.println("-----------------------------");
         System.out.println();
@@ -189,5 +193,6 @@ public class AdminFunctionality {
             System.out.printf("%d\t\t%s\t\t%s\n", med.getStock(), med.getExpiryDate(), med.getName());
         }
     }
+
 };
 // -------------------------------------------------------------------------------------------
